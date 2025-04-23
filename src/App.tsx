@@ -1,6 +1,14 @@
+import { RouterProvider } from "react-router-dom";
+import ThemeProvider from "./theme/ThemeProvider";
+import router from "./routes/route";
+import { Toaster } from "sonner";
+
 const App = () => {
   return (
-    <div className="bg-blue-500 text-white p-4">App</div>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
+      <Toaster position="top-right" duration={3000} />
+    </ThemeProvider>
   )
 }
 
