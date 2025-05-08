@@ -1,4 +1,9 @@
 declare global {
+  interface ProtectedRouteProps {
+    allowedRole: string[];
+    children: React.ReactNode;
+  }
+  
   interface ApiRequest<T> {
     request: T;
   }
@@ -12,4 +17,5 @@ declare global {
   }
 }
 
-export {}
+export {};
+ 

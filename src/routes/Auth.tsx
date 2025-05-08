@@ -3,7 +3,7 @@ import AuthLayout from "@/layouts/AuthLayout"
 
 const Auth = [
     {
-        path: "/",
+        path: "/login",
         element: <AuthLayout />,
         children: [
             {

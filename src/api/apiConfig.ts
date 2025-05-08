@@ -7,13 +7,14 @@ const unAuthorized = () => {
     toast.error('Unauthorized, please login Again');
 }
 
-const baseUrl = import.meta.env.SMS_API_BASE_URL || "http://192.168.100.175:5000";
+const baseUrl = import.meta.env.SMS_API_BASE_URL || "http://192.168.100.194:5000/api";
 
 const api = axios.create({
     baseURL: baseUrl,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json'
     }
 });
 

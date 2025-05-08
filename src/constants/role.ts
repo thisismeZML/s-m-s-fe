@@ -1,10 +1,6 @@
-declare global {
-    enum Role {
-        superAdmin = "superAdmin",
-        admin = "admin",
-        faulty = "faulty",
-        student = "student"
-    }
-}
-
-export {}
+export const rolePaths: Record<string, string> = {
+    SuperAdmin: "/superadmin",
+    Admin: "/admin",
+    Faculty: "/faculty",
+    Student: "/student",
+  };
