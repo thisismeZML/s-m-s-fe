@@ -1,10 +1,15 @@
-import { Folder, Layers, PanelRight } from "lucide-react";
+import { Book, Layers, PanelRight, ScrollText } from "lucide-react";
 import { useState } from "react";
 import SidebarItem from "./SidebarItem";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Theme } from "@/stores/ThemeStore";
-import { Home, Settings } from "lucide-react";
+import { Home } from "lucide-react";
 import SidebarDropdown from "./SidebarDropdown";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import useUserStore from "@/stores/UserStore";
+import { decodeToken } from "@/utils/decodeToken";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const SuperAdminSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -14,6 +19,11 @@ const SuperAdminSidebar = () => {
   };
 
   const { theme } = useTheme();
+
+  const navigate = useNavigate();
+
+  const { user } = useUserStore();
+  const decoded = user?.token ? decodeToken(user.token) : null;
 
   return (
     <aside
@@ -75,13 +85,69 @@ const SuperAdminSidebar = () => {
             // { label: "", href: "/permissions" },
           ]}
         />
-        <SidebarItem
-          icon={<Settings size={20} />}
-          label="Settings"
+        <SidebarDropdown
+          icon={<Book size={20} />}
+          label="Course"
           collapsed={collapsed}
-          href="/settings"
+          items={[
+            { label: "Course List", href: "course-list" },
+            { label: "Create Course", href: "create-course" },
+          ]}
+        />
+        <SidebarDropdown
+          icon={<ScrollText size={20} />}
+          label="Prerequisite"
+          collapsed={collapsed}
+          items={[
+            { label: "Prerequisite List", href: "prerequisite-list" },
+            { label: "Create Prerequisite", href: "create-prerequisite" },
+          ]}
         />
       </nav>
+      {/* Profile */}
+      <div className="mt-auto relative">
+        <div className="group relative cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800 transition">
+          <div className="flex items-center gap-2">
+            <Avatar className="w-9 h-9">
+              <AvatarImage src={decoded?.profile || ""} alt={decoded?.name || "User"} />
+              <AvatarFallback>
+                {decoded?.name
+                  ?.split(" ")
+                  .map((word) => word[0])
+                  .join("")
+                  .toUpperCase() || "SA"}
+              </AvatarFallback>
+            </Avatar>
+            {!collapsed && (
+              <div className="text-sm">
+                <p className="font-medium">{decoded?.name || "User"}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {decoded?.email || "user@email.com"}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Dropdown */}
+          <div className="absolute bottom-12 left-0 w-48 bg-white dark:bg-neutral-900 shadow-xl border dark:border-neutral-800 rounded-lg z-50 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200">
+            <a
+              href="/settings"
+              className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-neutral-800"
+            >
+              Settings
+            </a>
+            <button
+              onClick={() => {
+                Cookies.remove("accessToken");
+                navigate("/login");
+              }}
+              className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 };

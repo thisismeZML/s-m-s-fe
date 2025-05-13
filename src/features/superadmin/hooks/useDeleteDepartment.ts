@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import deleteDepartment from "../services/deleteDepartmentList";
+import { toast } from "sonner";
 
 const useDeleteDepartment = () => {
   const queryClient = useQueryClient();
@@ -10,6 +11,7 @@ const useDeleteDepartment = () => {
       queryClient.invalidateQueries({
         queryKey: ["departments"],
       });
+      toast.success("Deleted successfully");
     },
   });
 };
